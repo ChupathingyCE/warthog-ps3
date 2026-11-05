@@ -33,7 +33,9 @@ consoles have their own repositories:
 
 ## Install and set up
 
-1. Download `halo_ps3.pkg` from the [Releases page](https://github.com/ChupathingyCE/warthog-ps3/releases/latest).
+1. Get `halo_ps3.pkg`. There is no release yet: until there is one, take it from the newest
+   [Build](https://github.com/ChupathingyCE/warthog-ps3/actions/workflows/build.yml) run on main
+   (its `halo_ps3-pkg` artifact, signed in to GitHub), or build it yourself (see [Compiling](#compiling)).
 2. Install it with the Package Manager on the XMB (CFW or PS3HEN).
 3. Extract the `maps` folder from your Xbox disc image of Halo: Combat Evolved. A Chupathingy build for the PC
    copies the maps out of the disc image at its first start.
@@ -241,7 +243,7 @@ Chupathingy-PS3 is an unofficial fan project. It is not endorsed by or affiliate
 Halo Studios, Activision, Bungie or Sony. Halo and Halo: Combat Evolved are trademarks of Microsoft Corporation.
 No game data is included. You must provide your own copy of the game.
 
-## License
+## History
 
-GPL-3.0-or-later (LICENSE). The history of this repository is Matt's PS3
-work from Mayo1970/halo-ce-ps3, with his name and dates.
+The history of this repository is Matt's PS3 work from Mayo1970/halo-ce-ps3,
+with his name and dates.
