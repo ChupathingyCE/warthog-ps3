@@ -72,6 +72,13 @@ int hud_hires_asset_ce_only(long asset)
 	return 0;
 }
 
+/* no title sets to stand in for each other */
+long hud_hires_asset_alternate(long asset)
+{
+	(void)asset;
+	return 0;
+}
+
 long hud_hires_ce_stock_count_get(void)
 {
 	return 0;
@@ -180,6 +187,14 @@ void halo_custom_edition_texels_channels(const void *texels, unsigned char chann
 
 void halo_custom_edition_texels_forget(void)
 {
+}
+
+/* ---------- Custom Edition maps' downloads (map_download.c): none yet, a missing map is copied by hand */
+
+int map_download_possible(const char *name)
+{
+	(void)name;
+	return 0;
 }
 
 /* ---------- the renderer's write tracking (memory_watch.c): none, the RSX copies go as maps load */
@@ -491,7 +506,7 @@ int port_mods_list(char *text, unsigned long size)
 }
 
 /* ---------- ChupathingyCE's desktop services the PS3 has not: the game browser's list (browser.c), the menus'
-pictures and window (d3d8_gl.c, sdl_platform.c), the keyboard's prompts (xinput_sdl.c), map packs (ui_map_list.c) */
+pictures and window (d3d8_gl.c, sdl_platform.c), the keyboard's prompts (xinput_sdl.c) */
 
 int browser_version_state(int version)
 {
@@ -525,6 +540,14 @@ int browser_list_filter_allows(const char *map)
 	return 1;
 }
 
+/* the filter as the PC's list bar names it (browser.c's) */
+const char *browser_list_filter_label(void)
+{
+	static const char *const labels[3] = { "CO-OP: SHOWN", "CO-OP: HIDDEN", "CO-OP: ONLY" };
+
+	return labels[list_filter];
+}
+
 void halo_draw_picture(const unsigned char *rgba, long width, long height)
 {
 	(void)rgba; (void)width; (void)height;
@@ -552,22 +575,4 @@ int platform_audio_device_names(char const **names, int maximum)
 {
 	(void)names; (void)maximum;
 	return 0;
-}
-
-void ui_map_list_map_name(char const *map, wchar_t *name, long size)
-{
-	long index;
-
-	for (index = 0; index + 1 < size && map[index]; index++)
-		name[index] = (wchar_t)(unsigned char)map[index];
-	if (size > 0)
-		name[index] = 0;
-}
-
-void ui_map_list_map_tag(char const *map, char *tag, long tag_size, char *title, long title_size)
-{
-	if (tag_size > 0)
-		snprintf(tag, (size_t)tag_size, "%s", map);
-	if (title_size > 0)
-		snprintf(title, (size_t)title_size, "%s", map);
 }

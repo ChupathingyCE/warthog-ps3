@@ -22,10 +22,9 @@ follows this one.
 You need your own copy of Halo. No game files or SDK files are included.
 
 This repository holds the PS3 port. The game itself is the `chupathingyce`
-submodule. For now it points at Matt's `ps3` branch of the game; those
-changes are moving into the game's main branch one pull request at a time,
-and then the submodule follows ChupathingyCE/chupathingyce. The other
-consoles have their own repositories:
+submodule, [ChupathingyCE/chupathingyce](https://github.com/ChupathingyCE/chupathingyce),
+pinned to a commit of its main branch. The PS3's hooks in the game are behind
+`HALO_PS3`. The other consoles have their own repositories:
 [warthog-xbox](https://github.com/ChupathingyCE/warthog-xbox),
 [warthog-360](https://github.com/ChupathingyCE/warthog-360),
 [warthog-wiiu](https://github.com/ChupathingyCE/warthog-wiiu) and
