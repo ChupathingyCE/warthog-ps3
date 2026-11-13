@@ -250,6 +250,14 @@ static void ce_bitmap_channels(
 	}
 }
 
+/* a compressed meter keeps Halo PC's channels (ce_bitmap_channels moves only 32-bit texels), so the meter shader
+reads it there (rasterizer_xbox_dynavobgeom.c), as on the Xbox */
+boolean platform_ce_meter_in_pc_channels(
+	struct bitmap_data const *bitmap)
+{
+	return bitmap && TEST_FLAG(bitmap->flags, _ce_bitmap_compressed_bit) && ce_hud_bitmap_is_meter(bitmap);
+}
+
 void platform_ce_bitmap_loaded(
 	struct bitmap_data *bitmap)
 {

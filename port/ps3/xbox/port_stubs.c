@@ -72,6 +72,13 @@ int hud_hires_asset_ce_only(long asset)
 	return 0;
 }
 
+/* no title sets to stand in for each other */
+long hud_hires_asset_alternate(long asset)
+{
+	(void)asset;
+	return 0;
+}
+
 long hud_hires_ce_stock_count_get(void)
 {
 	return 0;
@@ -531,6 +538,14 @@ int browser_list_filter_allows(const char *map)
 {
 	(void)map;
 	return 1;
+}
+
+/* the filter as the PC's list bar names it (browser.c's) */
+const char *browser_list_filter_label(void)
+{
+	static const char *const labels[3] = { "CO-OP: SHOWN", "CO-OP: HIDDEN", "CO-OP: ONLY" };
+
+	return labels[list_filter];
 }
 
 void halo_draw_picture(const unsigned char *rgba, long width, long height)

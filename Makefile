@@ -157,7 +157,8 @@ XBOX_UNITS := $(wildcard $(PS3_DIR)/xbox/*.c) \
               msvc_wide.c port_config.c xbdm.c xbox_xapi.c p2p.c p2p_copies.c p2p_crypto.c p2p_discord.c \
               p2p_lobby.c p2p_probe.c p2p_signal.c log_address.c thread_stop.c ui_point.c build_identity.c \
               discord_activity.c delta.c delta_compat.c port_folders.c delta_wire.c delta_peer.c delta_chat.c \
-              delta_chat_words.c delta_chat_bridge.c delta_peer_game.c menu_files.c map_archive.c map_file_hash.c) \
+              delta_chat_words.c delta_chat_bridge.c delta_peer_game.c menu_files.c map_archive.c map_file_hash.c \
+              playlist_manifest.c) \
               $(KCP_DIR)/ikcp.c
 XBOX_OBJS := $(patsubst %.c,$(BUILD)/obj/%.o,$(XBOX_UNITS))
 
