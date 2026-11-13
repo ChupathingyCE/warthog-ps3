@@ -22,9 +22,9 @@ follows this one.
 You need your own copy of Halo. No game files or SDK files are included.
 
 This repository holds the PS3 port. The game itself is the `chupathingyce`
-submodule. For now it points at Matt's `ps3` branch of the game; those
-changes are moving into the game's main branch one pull request at a time,
-and then the submodule follows ChupathingyCE/chupathingyce. The other
+submodule, from Matt's own fork of the game
+([Mayo1970/chupathingyce](https://github.com/Mayo1970/chupathingyce), branch
+`ps3`). Small fixes from it also go to the game's main branch. The other
 consoles have their own repositories:
 [warthog-xbox](https://github.com/ChupathingyCE/warthog-xbox),
 [warthog-360](https://github.com/ChupathingyCE/warthog-360),
@@ -87,6 +87,12 @@ SETTINGS > EXTRA OPTIONS in the main menu has these settings:
 and they refuse a code as a link that is not valid. They cannot join a game that a PS3 hosts by its code.
 
 Some heavy fights drop below 60 frames per second. DYNAMIC RESOLUTION or the QUALITY preset helps.
+
+## Report problems
+
+Open an [issue](https://github.com/ChupathingyCE/warthog-ps3/issues) here, or
+ask on the [Discord](https://discord.gg/chupathingy). Say what you were doing,
+your firmware (CFW or PS3HEN) and which build you have.
 
 ## Compiling
 
@@ -214,7 +220,7 @@ Chupathingy-PS3 is an AI-assisted project.
 
 ## Credits
 
-- [ChupathingyCE](https://github.com/ChupathingyCE/chupathingyce): the game that Chupathingy-PS3 starts from.
+- [Chupathingy](https://github.com/ChupathingyCE/chupathingyce): the game that Chupathingy-PS3 starts from.
 - [bnunu/halo-1](https://github.com/bnunu/halo-1) and [punpckhdq/halo](https://github.com/punpckhdq/halo): the
   decompilation.
 - [Invader](https://github.com/SnowyMouse/invader): the tag definitions for the map data's byte swap.
@@ -227,7 +233,7 @@ Chupathingy-PS3 is free software, licensed under the
 See [LICENSE](LICENSE). If you share a package built from Chupathingy-PS3, you must also give its full source code
 under the GPL-3.0.
 
-- **What Chupathingy-PS3 builds on.** [ChupathingyCE](https://github.com/ChupathingyCE/chupathingyce) is under the
+- **What Chupathingy-PS3 builds on.** [Chupathingy](https://github.com/ChupathingyCE/chupathingyce) is under the
   GPL-3.0-or-later, with a permission for console SDKs. Its releases up to 0.7.5d stay under CC0. The details are in
   its [docs/license.md](https://github.com/ChupathingyCE/chupathingyce/blob/main/docs/license.md).
 - **Earlier versions.** The versions of this repository before the move to ChupathingyCE stay under the licenses
