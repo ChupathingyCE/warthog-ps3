@@ -1,0 +1,87 @@
+name: Release
+
+# A PS3 test build for a tag: test-<date> (git tag test-20261113 && git push
+# origin test-20261113) or v<number>, or by hand with the tag's name. The
+# port is built by build.yml (the ps3dev image) and published as a GitHub
+# release marked pre-release, titled "PS3 test build", with the zip of the
+# package (halo_ps3.pkg) and its SHA-256. No game files are ever in it. A
+# manual run without a tag builds main and releases nothing.
+on:
+  push:
+    tags:
+      - 'test-*'
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: The tag to build and release (empty, build main and release nothing)
+        type: string
+        default: ""
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}-${{ inputs.tag }}
+
+jobs:
+  build:
+    uses: ./.github/workflows/build.yml
+    with:
+      ref: ${{ inputs.tag }}
+
+  release:
+    needs: build
+    if: ${{ startsWith(github.ref, 'refs/tags/') || inputs.tag != '' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      TAG: ${{ inputs.tag || github.ref_name }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ inputs.tag || github.ref_name }}
+
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          pattern: warthog-ps3-*
+          path: package
+
+      - name: Package
+        run: |
+          mkdir release
+          zip_name="chupathingy-ps3-$TAG.zip"
+          folder="$(ls -d package/*/ | head -1)"
+          if [ ! -f "$folder/halo_ps3.pkg" ]; then
+            echo "::error::the package is missing halo_ps3.pkg"
+            exit 1
+          fi
+          if find "$folder" -path '*/maps/*' | grep -q .; then
+            echo "::error::a maps folder is in the package; game files are never released"
+            exit 1
+          fi
+          (cd "$folder" && zip -qr "$GITHUB_WORKSPACE/release/$zip_name" halo_ps3.pkg)
+          (cd release && sha256sum "$zip_name" > "$zip_name.sha256")
+          cat "release/$zip_name.sha256"
+
+      - name: Publish
+        run: |
+          zip_name="chupathingy-ps3-$TAG.zip"
+          sum="$(cut -d' ' -f1 "release/$zip_name.sha256")"
+          commit="$(git rev-parse HEAD)"
+          {
+            echo "A PS3 test build, $TAG. Install halo_ps3.pkg on the console (README.md); the maps come from your own disc and are not in it."
+            echo
+            echo "Commit: $GITHUB_SERVER_URL/$GH_REPO/commit/$commit"
+            echo "SHA-256: $sum"
+          } > notes.md
+          if gh release view "$TAG" > /dev/null 2>&1; then
+            echo "::error::$TAG is released already"
+            exit 1
+          fi
+          gh release create "$TAG" "release/$zip_name" "release/$zip_name.sha256" \
+            --target "$commit" --prerelease --title "PS3 test build ($TAG)" --notes-file notes.md

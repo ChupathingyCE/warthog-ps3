@@ -1,4 +1,8 @@
-# Builds the PS3 package in the ps3dev image, as build.sh does locally
+# Builds the PS3 package in the ps3dev image, as build.sh does locally, for
+# every push to main, every pull request and by hand, and keeps the package
+# (build/ps3/halo_ps3.pkg) as the run's artifact. No game files are in it:
+# the maps come from the player's own disc. The nightly (nightly.yml) and
+# the release (release.yml) call this one.
 name: Build
 
 on:
@@ -6,17 +10,45 @@ on:
     branches: [main]
   pull_request:
   workflow_dispatch:
+  workflow_call:
+    inputs:
+      game-ref:
+        description: A commit of the game to build instead of the submodule's (the nightly's; empty, the submodule's)
+        type: string
+        default: ""
+      ref:
+        description: The commit of this repository to build (the release's tag; empty, the run's)
+        type: string
+        default: ""
 
 permissions:
   contents: read
 
+concurrency:
+  group: build-${{ github.workflow }}-${{ github.ref }}-${{ inputs.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
 jobs:
   ps3:
     runs-on: ubuntu-latest
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: ${{ inputs.ref }}
           submodules: recursive
+
+      # the nightly builds the game's current branch without committing it
+      - name: Use the requested game commit
+        env:
+          GAME_REF: ${{ inputs.game-ref }}
+        run: |
+          if [ -n "$GAME_REF" ]; then
+            git -C chupathingyce fetch --depth 1 origin "$GAME_REF"
+            git -C chupathingyce checkout --detach FETCH_HEAD
+            git -C chupathingyce log -1 --oneline
+          fi
+
       - name: Get the ps3dev image
         run: |
           docker pull mayo2853/ps3dev-latest:latest
@@ -27,6 +59,7 @@ jobs:
         run: ./build.sh check
       - uses: actions/upload-artifact@v4
         with:
-          name: halo_ps3-pkg
+          name: warthog-ps3-${{ github.sha }}
           path: build/ps3/halo_ps3.pkg
           if-no-files-found: error
+          retention-days: 7
